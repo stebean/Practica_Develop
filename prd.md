@@ -1,78 +1,98 @@
 # Product Requirements Document (PRD): Project Showcase App
 
-**Autor:** Product Owner Agent
-**Estado:** Borrador
-**Versión:** 1.0
+Autor: Product Owner Agent
+Estado: Planificado (MVP)
+Versión: 1.1
+Última actualización: 2025-10-20
 
 ---
 
-## 1. Introducción y Propósito
+## 1. Propósito
+Crear una aplicación pública para exhibir agentes de IA y los equipos que los construyeron, mostrando propósito, capacidades y autoría de manera clara y navegable.
 
-Vivimos en una era de creación digital y es fundamental no solo hacer un gran trabajo, sino también saber mostrarlo. Este proyecto nació de la necesidad de tener una vitrina pública, transparente y atractiva para presentar los resultados y el esfuerzo invertido por los equipos.
+## 2. Alcance y Contexto
+- Frontend: Flutter.
+- Backend: Java + Spring Boot (API REST, solo lectura en MVP).
+- Datos: Supabase (PostgreSQL/BaaS).
+- Fuera de alcance (MVP): métricas individuales, grabaciones, explorador de carpetas, autenticación.
 
-El propósito de esta aplicación es servir como un repositorio central y un escaparate interactivo. Permitirá a cualquier persona (público general, futuros colaboradores, stakeholders) explorar los agentes de IA que se han construido, entender su funcionalidad y conocer a los talentosos equipos y desarrolladores que los hicieron posibles.
+## 3. Visión (alineada al Agente Product Owner)
+Maximizar valor y transparencia: priorizar visualización clara de agentes y equipos, con historias testables y backlog visible.
 
-## 2. Objetivos y Metas
+## 4. Objetivos
+- Centralizar información de agentes y equipos.
+- Aumentar visibilidad del trabajo.
+- Facilitar comprensión de capacidades y alcance.
 
-Los objetivos de negocio y de producto para el MVP son:
+## 5. Usuarios y Casos de Uso
+Perfiles: visitante público, stakeholder/colaborador.
+Casos (MVP):
+- CU1: Ver lista/galería de agentes.
+- CU2: Ver detalle de agente.
+- CU3: Ver lista de equipos.
+- CU4: Ver detalle de equipo y miembros.
+- CU5: Acceder a ficha básica del desarrollador principal desde el agente.
 
-*   **Centralizar la Información:** Crear una única fuente de verdad para consultar los resultados del proyecto (agentes y equipos).
-*   **Aumentar la Visibilidad:** Dar a conocer el trabajo realizado a una audiencia amplia.
-*   **Facilitar el Entendimiento:** Presentar la información de los agentes de una manera clara y estructurada para que su propósito y valor sean fáciles de comprender.
+## 6. Historias y Criterios de Aceptación
+Épica Agentes:
+- HU-1.1: Ver lista de agentes.
+  - CA: Muestra nombre y equipo; maneja vacío/error.
+- HU-1.2: Ver detalle de agente.
+  - CA: Muestra descripción, rol, capacidades, equipo y desarrollador principal.
+- HU-1.3: Abrir especificación si existe.
+  - CA: Si hay specUrl, botón que abre enlace.
 
-## 3. Audiencia Objetivo
+Épica Equipos/Desarrolladores:
+- HU-2.1: Ver lista de equipos.
+  - CA: Muestra nombre y conteo de agentes.
+- HU-2.2: Ver detalle de equipo.
+  - CA: Lista miembros (nombre, rol) y agentes del equipo.
+- HU-2.3: Ver ficha de desarrollador principal.
+  - CA: Muestra nombre y rol.
 
-La aplicación es pública. La audiencia incluye, pero no se limita a:
+## 7. Requisitos Funcionales
+- RF-1: Listado de agentes con paginación simple o lazy load.
+- RF-2: Detalle de agente con chips de capacidades.
+- RF-3: Listado de equipos con conteo de agentes.
+- RF-4: Detalle de equipo con miembros y agentes.
+- RF-5: Enlace a especificación (XML/MD) si existe.
 
-*   **Público General:** Personas interesadas en la innovación y la IA.
-*   **Stakeholders y Patrocinadores:** Para que puedan ver el retorno de la inversión y el progreso.
-*   **Futuros Colaboradores:** Para que entiendan la cultura de trabajo y el tipo de proyectos que se realizan.
-*   **Los propios miembros del equipo:** Como un portafolio de su trabajo.
+## 8. Requisitos No Funcionales
+- RNF-1: Disponibilidad backend >= 99% durante demo.
+- RNF-2: Carga inicial < 2s en red estable.
+- RNF-3: Accesibilidad básica (contraste, tamaños).
+- RNF-4: Seguridad básica (CORS, sanitización).
+- RNF-5: Observabilidad mínima (logs y captura de errores).
 
-## 4. Requisitos y Características del MVP
+## 9. Datos (Supabase) y Semillas
+Tablas: agents, teams, members, team_members; attachments (post‑MVP). Detalle de campos en `MVP_Descripcion.md`.
+Semillas: ≥3 equipos, ≥5 agentes, ≥6 miembros; ≥1 agente con specUrl a `product-owner-agent.xml`.
 
-A continuación se detallan las épicas y las historias de usuario priorizadas para el Producto Mínimo Viable (MVP).
+## 10. API REST (Spring Boot)
+GET /api/agents → lista con team y owner básicos.
+GET /api/agents/{id} → detalle completo.
+GET /api/teams → lista con agentsCount.
+GET /api/teams/{id} → detalle con miembros y agentes.
+Errores: { code, message }.
 
-### Épica 1: Visualización de Agentes
+## 11. Arquitectura e Integración
+Flutter consume API REST. Spring Boot orquesta acceso a Supabase (PostgreSQL). Despliegue back con perfiles dev/prod; front web o móvil.
 
-*Como visitante, quiero poder explorar todos los agentes creados para entender el alcance y la calidad del trabajo realizado.*
+## 12. UX de Alto Nivel
+Pantallas: HomeAgentes, AgenteDetalle, Equipos, EquipoDetalle, FichaDesarrollador. Estados: cargando, vacío, error con reintento.
 
-*   **HU-1.1:** Como visitante, al abrir la aplicación, quiero ver una pantalla principal con una lista o galería de todos los agentes creados para tener una visión general inmediata.
-*   **HU-1.2:** Como visitante, quiero poder pulsar en un agente de la lista para ser dirigido a una pantalla de detalle.
-*   **HU-1.3:** Como visitante, en la pantalla de detalle de un agente, quiero poder leer toda su información relevante (nombre, descripción, rol, capacidades, etc.) para comprender su función a fondo.
+## 13. Métricas de Éxito
+Adopción (visitantes/instalaciones), engagement (vistas de detalle, tiempo de sesión), feedback cualitativo de stakeholders.
 
-### Épica 2: Visualización de Equipos y Desarrolladores
+## 14. Roadmap (tentativo)
+S1: Esquema Supabase, contrato API, esqueleto Flutter.
+S2: Agentes (lista/detalle).
+S3: Equipos y desarrolladores.
+S4: QA, hardening, docs y release.
 
-*Como visitante, quiero poder conocer a las personas y equipos detrás de la creación de los agentes para entender el aspecto humano del proyecto.*
-
-*   **HU-2.1:** Como visitante, quiero poder acceder a una sección que liste todos los equipos que participaron en el proyecto.
-*   **HU-2.2:** Como visitante, al seleccionar un equipo, quiero ver una lista de los miembros que lo conformaron.
-*   **HU-2.3:** Como visitante, desde la pantalla de detalle de un agente, quiero ver un enlace o sección que me muestre la información básica de su desarrollador (nombre y rol) para poder atribuir el trabajo a su creador.
-
-## 5. Métricas de Éxito para el MVP
-
-El éxito de esta primera versión se medirá a través de:
-
-*   **Adopción:** Número de visitantes únicos durante el primer mes post-lanzamiento.
-*   **Engagement:** 
-    *   Número de vistas a las pantallas de detalle de los agentes (demuestra interés en el contenido).
-    *   Tiempo promedio de sesión en la aplicación.
-*   **Feedback Cualitativo:** Recopilación de opiniones informales de los stakeholders y usuarios sobre la claridad y utilidad de la aplicación.
-
-## 6. Funcionalidades Fuera de Alcance (Post-MVP)
-
-Para garantizar una entrega rápida y centrada en el valor principal, las siguientes funcionalidades se dejan explícitamente fuera del alcance del MVP y se considerarán para futuras versiones:
-
-*   Métricas de desempeño, asistencia o progreso de los desarrolladores.
-*   Visualización de grabaciones de las sesiones.
-*   Un explorador de las estructuras de carpetas.
-*   Cualquier tipo de login o autenticación de usuarios.
-
-## 7. Requisitos Técnicos
-
-La arquitectura y tecnologías confirmadas para el desarrollo del MVP son:
-
-*   **Frontend:** Flutter
-*   **Backend:** Java con Spring Boot
-*   **Base de Datos / BaaS:** Supabase
-*   **Comunicación:** Una API REST que conectará el frontend con el backend para el intercambio de datos.
+## 15. Gobernanza (Agente Product Owner)
+Principios: value_maximization (crítico), clarity_and_transparency (alto).
+Backlog: visible y priorizado; refinamiento semanal.
+DoR: historia clara, criterios, datos ejemplo y dependencias.
+DoD: integrado, manejo de errores/estados, pruebas básicas y documentación actualizada.
+Rol: PO define qué/por qué; equipo define cómo (no dicta arquitectura).

@@ -1,4 +1,8 @@
 # MVP Definition: Project Showcase App
+Autor: Esteban de Santiago García
+Versión: 1.1
+Última actualización: 2025-10-20
+---
 
 ## 1. Objetivo del Producto
 

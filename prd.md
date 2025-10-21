@@ -1,8 +1,11 @@
 # Product Requirements Document (PRD): Project Showcase App
 
 Autor: Esteban de Santiago García
+
 Estado: Planificado (MVP)
+
 Versión: 1.1
+
 Última actualización: 2025-10-20
 
 ---
